@@ -8,7 +8,7 @@ class DialogForm extends StatefulWidget {
   final String primeiraHint;
   final String segundaLabel;
   final String segundaHint;
-  final void Function(String primeiroParam, String segundoParam, int id) funcao;
+  final void Function(String nome, String preco) acaoASerExecutada;
 
   const DialogForm({
     Key? key,
@@ -18,7 +18,7 @@ class DialogForm extends StatefulWidget {
     required this.primeiraHint,
     required this.segundaLabel,
     required this.segundaHint,
-    required this.funcao,
+    required this.acaoASerExecutada,
   }) : super(key: key);
 
   @override
@@ -28,19 +28,17 @@ class DialogForm extends StatefulWidget {
 class _DialogFormState extends State<DialogForm> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  Map<String, String> _formData = {};
+  final Map<String, String> _formData = {};
 
   void _submit() {
-    if(!_formKey.currentState!.validate()) {
-      return;
-    }
+    
+    if(!_formKey.currentState!.validate()) return;
+
     _formKey.currentState!.save();
 
-
-    widget.funcao(
+    widget.acaoASerExecutada(
       _formData["primeiroParam"].toString(), 
       _formData["segundoParam"].toString(), 
-      widget.id ?? -1
     );
     Navigator.of(context).pop();
   }
@@ -54,6 +52,7 @@ class _DialogFormState extends State<DialogForm> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            Text("cuidado com o que digita"),
             TextFormField(
               decoration: InputDecoration(
                 label: Text(widget.primeiraLabel),

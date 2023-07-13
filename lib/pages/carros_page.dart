@@ -19,6 +19,26 @@ class _CarrosPageState extends State<CarrosPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Lista de carros"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              showDialog(
+                context: context, 
+                builder: (context) => DialogForm(
+                  title: "Adicionar produto", 
+                  primeiraLabel: "Nome do produto", 
+                  primeiraHint: "Celta", 
+                  segundaLabel: "Preço", 
+                  segundaHint: r"R$350000.00", 
+                  acaoASerExecutada: (nome, preco) {
+                    provider.adicionar(nome, preco);
+                  },
+                ) 
+              );
+            }, 
+            icon: const Icon(Icons.add)
+          )
+        ],
       ),
       body: provider.carros.isEmpty
       ? const Center(child: Text("Nenhum carro registrado."),)
@@ -38,7 +58,13 @@ class _CarrosPageState extends State<CarrosPage> {
                   segundaLabel: "Novo preço",
                   segundaHint: "35000.00",
                   id: provider.carros[index].id,
-                  funcao: provider.editar,
+                  acaoASerExecutada: (nome, preco) {
+                    provider.editar(
+                      nome, 
+                      preco, 
+                      provider.carros[index].id
+                    );
+                  },
                 );
               } 
             )
